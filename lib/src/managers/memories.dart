@@ -19,4 +19,7 @@ class Memories {
     Locale('en', 'IN'),
   ];
   static String languageJsonFilePath = 'i18n/';
+
+  /// FCM topics
+  static String memoriesMobile = 'memories_mobile';
 }

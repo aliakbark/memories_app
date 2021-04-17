@@ -11,8 +11,14 @@ class MyNavigator {
             builder: (context) => MemoryDetailsScreen(memory: memory)));
   }
 
-  static goToCreateMemory(BuildContext context) {
+  static goToCreateMemory(BuildContext context,
+      {double latitude, double longitude}) {
     return Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateMemoryScreen()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => CreateMemoryScreen(
+                  latitude: latitude,
+                  longitude: longitude,
+                )));
   }
 }
