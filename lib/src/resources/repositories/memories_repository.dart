@@ -8,9 +8,8 @@ import 'package:memories_app/src/models/memory.dart';
 import 'package:memories_app/src/resources/remote/memories_api_provider.dart';
 
 abstract class MemoriesRepository {
-  /// Throws [NetworkException].
   Future<MemoriesResponse> fetchMemoriesAround(
-      {String latitude, String longitude});
+      {required String latitude, required String longitude});
 }
 
 class FakeMemoryRepository implements MemoriesRepository {
@@ -18,10 +17,10 @@ class FakeMemoryRepository implements MemoriesRepository {
 
   @override
   Future<MemoriesResponse> fetchMemoriesAround(
-      {String latitude, String longitude}) {
+      {required String latitude, required String longitude}) {
     // Simulate network delay
     return Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
       () {
         final random = Random();
 
@@ -37,7 +36,7 @@ class FakeMemoryRepository implements MemoriesRepository {
                 lanternsAround:
                     LanternsAround(latitude: latitude, longitude: longitude)))
             .then((res) {
-          if (res.responseHeader.status != "200") {
+          if (res.responseHeader?.status != "200") {
             throw NetworkException();
           }
           return res;

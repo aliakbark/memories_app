@@ -7,18 +7,18 @@ import 'package:google_fonts/google_fonts.dart';
 class MyAppTheme {
   MyAppTheme._();
 
-  static const Color primaryLightColor = const Color(0xff212121);
-  static const Color primaryLightColorVariant = const Color(0xff484848);
-  static const Color secondaryLightColor = const Color(0xff66bb6a);
-  static const Color secondaryLightColorVariant = const Color(0xff80e27e);
-  static final Color primaryLightSwatchAppColor =
+  static const Color primaryLightColor = Color(0xff212121);
+  static const Color primaryLightColorVariant = Color(0xff484848);
+  static const Color secondaryLightColor = Color(0xff66bb6a);
+  static const Color secondaryLightColorVariant = Color(0xff80e27e);
+  static final MaterialColor primaryLightSwatchAppColor =
       MyAppTheme.generateMaterialColor(primaryLightColor);
 
-  static const Color primaryDarkColor = const Color(0xff212121);
-  static const Color primaryDarkColorVariant = const Color(0xff484848);
-  static const Color secondaryDarkColor = const Color(0xff66bb6a);
-  static const Color secondaryDarkColorVariant = const Color(0xff80e27e);
-  static final Color primaryDarkSwatchAppColor =
+  static const Color primaryDarkColor = Color(0xff212121);
+  static const Color primaryDarkColorVariant = Color(0xff484848);
+  static const Color secondaryDarkColor = Color(0xff66bb6a);
+  static const Color secondaryDarkColorVariant = Color(0xff80e27e);
+  static final MaterialColor primaryDarkSwatchAppColor =
       MyAppTheme.generateMaterialColor(primaryDarkColor);
 
   static const ColorScheme _lightColorScheme = ColorScheme.light(
@@ -28,7 +28,7 @@ class MyAppTheme {
     secondaryVariant: secondaryLightColorVariant,
     surface: Colors.white,
     background: Colors.white,
-    error: const Color(0xffb00020),
+    error: Color(0xffb00020),
     onPrimary: Colors.white,
     onSecondary: Colors.black,
     onSurface: Colors.black,
@@ -49,7 +49,7 @@ class MyAppTheme {
           IconThemeData(color: _lightColorScheme.primaryVariant, size: 20.0),
       textTheme: _lightTextTheme.copyWith(
           headline6: _lightTextTheme.headline6
-              .copyWith(color: _lightColorScheme.primaryVariant)),
+              ?.copyWith(color: _lightColorScheme.primaryVariant)),
       elevation: 0.0,
     ),
     tabBarTheme: TabBarTheme(
@@ -59,7 +59,7 @@ class MyAppTheme {
     ),
     buttonTheme: ButtonThemeData(
       height: 48.0,
-      padding: EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -71,17 +71,17 @@ class MyAppTheme {
         borderRadius: BorderRadius.circular(8.0),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(),
   );
 
   static const ColorScheme _darkColorScheme = ColorScheme.dark(
-    primary: const Color(0xffbb86fc),
-    primaryVariant: const Color(0xff3700B3),
-    secondary: const Color(0xff03dac6),
-    secondaryVariant: const Color(0xff03dac6),
-    surface: const Color(0xff121212),
-    background: const Color(0xff121212),
-    error: const Color(0xffcf6679),
+    primary: Color(0xffbb86fc),
+    primaryVariant: Color(0xff3700B3),
+    secondary: Color(0xff03dac6),
+    secondaryVariant: Color(0xff03dac6),
+    surface: Color(0xff121212),
+    background: Color(0xff121212),
+    error: Color(0xffcf6679),
     onPrimary: Colors.black,
     onSecondary: Colors.black,
     onSurface: Colors.white,
@@ -102,13 +102,13 @@ class MyAppTheme {
           IconThemeData(color: _darkColorScheme.primaryVariant, size: 20.0),
       textTheme: _darkTextTheme.copyWith(
           headline6: _darkTextTheme.headline6
-              .copyWith(color: _darkColorScheme.primaryVariant)),
+              ?.copyWith(color: _darkColorScheme.primaryVariant)),
       elevation: 0.0,
     ),
-    tabBarTheme: TabBarTheme(),
+    tabBarTheme: const TabBarTheme(),
     buttonTheme: ButtonThemeData(
       height: 48.0,
-      padding: EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -120,7 +120,7 @@ class MyAppTheme {
         borderRadius: BorderRadius.circular(8.0),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(),
   );
 
   static final TextTheme _lightTextTheme = TextTheme(

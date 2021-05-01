@@ -13,13 +13,13 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class FirebaseManager {
   FirebaseManager();
 
-  FirebaseMessaging _firebaseMessaging;
-  FirebaseAnalytics _firebaseAnalytics;
-  FirebaseAnalyticsObserver _firebaseAnalyticsObserver;
+  FirebaseMessaging? _firebaseMessaging;
+  FirebaseAnalytics? _firebaseAnalytics;
+  FirebaseAnalyticsObserver? _firebaseAnalyticsObserver;
 
   Future<void> init() async {
     if (Firebase.apps.isEmpty) {
-      FirebaseApp app = await Firebase.initializeApp();
+      final app = await Firebase.initializeApp();
       print('Initialized default app $app');
     }
     await _initializeAnalytics();
@@ -31,8 +31,7 @@ class FirebaseManager {
     _firebaseMessaging = FirebaseMessaging.instance;
 
     // For request permissions.
-    NotificationSettings notificationSettings =
-        await _firebaseMessaging.requestPermission(
+    final notificationSettings = await _firebaseMessaging?.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -42,48 +41,48 @@ class FirebaseManager {
       sound: true,
     );
 
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+    await _firebaseMessaging?.setForegroundNotificationPresentationOptions(
       alert: true, // Required to display a heads up notification
       badge: true,
       sound: true,
     );
 
-    await _firebaseMessaging.subscribeToTopic(Memories.memoriesMobile);
+    await _firebaseMessaging?.subscribeToTopic(Memories.memoriesMobile);
 
-    _firebaseMessaging.onTokenRefresh.listen((token) async {
+    _firebaseMessaging?.onTokenRefresh.listen((token) async {
       ObjectFactory().prefs.setFCMToken(token);
     });
 
-    return _firebaseMessaging;
+    return Future.value(_firebaseMessaging);
   }
 
   Future<FirebaseMessaging> get firebaseMessaging async {
-    if (_firebaseMessaging != null) return _firebaseMessaging;
+    if (_firebaseMessaging != null) return Future.value(_firebaseMessaging);
 
     await _initializeMessaging();
-    return _firebaseMessaging;
+    return Future.value(_firebaseMessaging);
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    // If you're going to use other Firebase services in the background, such as Firestore,
-    // make sure you call `initializeApp` before using other Firebase services.
+    /// If you're going to use other Firebase services in the background, such as Firestore,
+    /// make sure you call `initializeApp` before using other Firebase services.*/
 
-    print("Handling a background message: ${message.messageId}");
+    print('Handling a background message: ${message.messageId}');
   }
 
   /// Initialize firebase analytics
   Future<FirebaseAnalyticsObserver> _initializeAnalytics() async {
     _firebaseAnalytics = FirebaseAnalytics();
     _firebaseAnalyticsObserver =
-        FirebaseAnalyticsObserver(analytics: _firebaseAnalytics);
-    return _firebaseAnalyticsObserver;
+        FirebaseAnalyticsObserver(analytics: _firebaseAnalytics!);
+    return Future.value(_firebaseAnalyticsObserver);
   }
 
   FirebaseAnalyticsObserver get firebaseAnalyticsObserver {
-    if (_firebaseAnalyticsObserver != null) return _firebaseAnalyticsObserver;
+    if (_firebaseAnalyticsObserver != null) return _firebaseAnalyticsObserver!;
 
     _initializeAnalytics();
-    return _firebaseAnalyticsObserver;
+    return _firebaseAnalyticsObserver!;
   }
 }

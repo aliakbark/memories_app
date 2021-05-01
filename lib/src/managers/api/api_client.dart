@@ -5,18 +5,16 @@ import 'package:memories_app/src/managers/object_factory.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/foundation.dart';
 
 class ApiClient {
-  Dio _dio;
-  String test;
-
   ApiClient() {
     initClient();
   }
 
-  initClient() async {
-    _dio = new Dio(new BaseOptions(
+  Dio _dio = Dio();
+
+  void initClient() async {
+    _dio = Dio(BaseOptions(
         baseUrl: Memories.baseUrl,
         connectTimeout: 30000,
         receiveTimeout: 15000,
@@ -58,7 +56,7 @@ class ApiClient {
 
   Dio get authorizedDio {
     _dio.options.headers
-        .addAll({"Authorization": ObjectFactory().prefs.getAuthToken});
+        .addAll({'Authorization': ObjectFactory().prefs.getAuthToken});
     return _dio;
   }
 

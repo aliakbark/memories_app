@@ -3,44 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomRaisedButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final VoidCallback onLongPress;
-  final ValueChanged<bool> onHighlightChanged;
-  final MouseCursor mouseCursor;
-  final ButtonTextTheme textTheme;
-  final Color textColor;
-  final Color disabledTextColor;
-  final Color color;
-  final Color disabledColor;
-  final Color splashColor;
-  final Color focusColor;
-  final Color hoverColor;
-  final Color highlightColor;
-  final double elevation;
-  final double hoverElevation;
-  final double focusElevation;
-  final double highlightElevation;
-  final double disabledElevation;
-  final Brightness colorBrightness;
-  final double width;
-  final Widget child;
-  final bool isLoading;
-
-  bool get enabled => onPressed != null || onLongPress != null;
-  final EdgeInsetsGeometry padding;
-  final VisualDensity visualDensity;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
-  final FocusNode focusNode;
-  final bool autofocus;
-  final Duration animationDuration;
-  final MaterialTapTargetSize materialTapTargetSize;
-
-  final bool enableFeedback;
-
   const CustomRaisedButton({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
     this.onLongPress,
     this.onHighlightChanged,
     this.mouseCursor,
@@ -79,6 +44,41 @@ class CustomRaisedButton extends StatelessWidget {
         assert(disabledElevation == null || disabledElevation >= 0.0),
         assert(clipBehavior != null),
         super(key: key);
+
+  final VoidCallback onPressed;
+  final VoidCallback? onLongPress;
+  final ValueChanged<bool>? onHighlightChanged;
+  final MouseCursor? mouseCursor;
+  final ButtonTextTheme? textTheme;
+  final Color? textColor;
+  final Color? disabledTextColor;
+  final Color? color;
+  final Color? disabledColor;
+  final Color? splashColor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? highlightColor;
+  final double? elevation;
+  final double? hoverElevation;
+  final double? focusElevation;
+  final double? highlightElevation;
+  final double? disabledElevation;
+  final Brightness? colorBrightness;
+  final double? width;
+  final Widget? child;
+  final bool isLoading;
+
+  bool get enabled => onPressed != null || onLongPress != null;
+  final EdgeInsetsGeometry? padding;
+  final VisualDensity? visualDensity;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final Duration? animationDuration;
+  final MaterialTapTargetSize? materialTapTargetSize;
+
+  final bool enableFeedback;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class CustomRaisedButton extends StatelessWidget {
 
         child: isLoading
             ? SpinKitThreeBounce(
-            size: 32, color: Theme.of(context).primaryColor)
+                size: 32, color: Theme.of(context).primaryColor)
             : child,
       ),
     );

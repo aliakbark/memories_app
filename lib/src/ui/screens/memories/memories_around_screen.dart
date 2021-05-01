@@ -4,29 +4,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'package:memories_app/src/blocs/app/app_bloc.dart';
 import 'package:memories_app/src/cubits/memories_cubit.dart';
 import 'package:memories_app/src/managers/memories.dart';
 import 'package:memories_app/src/managers/object_factory.dart';
 import 'package:memories_app/src/models/memory.dart';
+import 'package:memories_app/src/resources/repositories/memories_repository.dart';
 import 'package:memories_app/src/utilities/my_navigator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:very_good_analysis/very_good_analysis.dart';
 
 class MemoriesAroundScreen extends StatefulWidget {
+  MemoriesAroundScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _MemoriesAroundScreenState();
+
+  static Route route() {
+    return MaterialPageRoute<void>(
+        builder: (_) => BlocProvider(
+            create: (BuildContext context) =>
+                MemoriesCubit(FakeMemoryRepository()),
+            child: MemoriesAroundScreen()));
+  }
 }
 
 class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
-  bool _serviceEnabled;
-  LocationPermission permission;
-  StreamSubscription<Position> positionStream;
+  bool? _serviceEnabled;
+  LocationPermission? permission;
+  StreamSubscription<Position>? positionStream;
 
-  FirebaseMessaging fcm;
+  FirebaseMessaging? fcm;
 
   bool _settingsOpened = false;
 
-  Position _currentPosition;
+  Position? _currentPosition;
 
   bool _locationSettingsOpened = false;
 
@@ -46,21 +58,37 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
 
   @override
   void dispose() {
-    if (positionStream != null) positionStream.cancel();
+    if (positionStream != null) positionStream?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+    print(user.toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text("Memories around me"),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(
+              user.photo ?? '',
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+        title: Text('${user.name}'),
         actions: [
+          // IconButton(
+          //     icon: Icon(Icons.refresh),
+          //     onPressed: () {
+          //       _determinePosition();
+          //     }),
           IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                _determinePosition();
-              }),
+            key: const Key('homePage_logout_iconButton'),
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
+          ),
         ],
       ),
       body: Container(
@@ -75,13 +103,14 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
               );
             }
           },
-          builder: (context, state) {
+          builder: (BuildContext context, MemoriesState state) {
             if (state is MemoriesInitial) {
               return buildInitialInput();
             } else if (state is MemoriesLoading) {
               return buildLoading();
             } else if (state is MemoriesLoaded) {
-              return buildMemoryList(state.memoriesResponse.memoriesAround);
+              return buildMemoryList(
+                  state.memoriesResponse.memoriesAround ?? []);
             } else {
               // (state is WeatherError)
               return buildInitialInput();
@@ -90,40 +119,41 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            if (_currentPosition != null) {
-              MyNavigator.goToCreateMemory(context,
-                  latitude: _currentPosition.latitude,
-                  longitude: _currentPosition.longitude);
-            }
-          }),
+        onPressed: () {
+          if (_currentPosition != null) {
+            MyNavigator.goToCreateMemory(context,
+                latitude: _currentPosition!.latitude,
+                longitude: _currentPosition!.longitude);
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
   Widget buildInitialInput() {
-    return Center(
+    return const Center(
       child: Text('No memories found around you!'),
     );
   }
 
   Widget buildLoading() {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
-  buildMemoryList(List<Memory> memoriesAround) {
+  ListView buildMemoryList(List<Memory> memoriesAround) {
     return ListView.builder(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         itemCount: memoriesAround.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            margin: EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(memoriesAround[index].title),
               subtitle: Text(memoriesAround[index].penName),
-              trailing: Text(memoriesAround[index].distance),
+              trailing: Text(memoriesAround[index].distance ?? ''),
               onTap: () => MyNavigator.goToMemoryDetails(context,
                   memory: memoriesAround[index]),
             ),
@@ -136,11 +166,11 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
 
     // Get any messages which caused the application to open from
     // a terminated state.
-    RemoteMessage initialMessage = await fcm.getInitialMessage();
+    final initialMessage = await fcm?.getInitialMessage();
 
     // If the message also contains a data property with a "type" of "chat",
     // navigate to a chat screen
-    if (initialMessage != null && initialMessage?.data['type'] == 'chat') {
+    if (initialMessage != null && initialMessage.data['type'] == 'chat') {
       print(initialMessage.data['type']);
     }
 
@@ -227,9 +257,10 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
           : currentPosition.latitude.toString() +
               ', ' +
               currentPosition.longitude.toString());
-
-      BlocProvider.of<MemoriesCubit>(context).getMemoriesAround(
+      context.read<MemoriesCubit>().getMemoriesAround(
           currentPosition.latitude, currentPosition.longitude);
+      // BlocProvider.of<MemoriesCubit>(context).getMemoriesAround(
+      //     currentPosition.latitude, currentPosition.longitude);
     }
   }
 }

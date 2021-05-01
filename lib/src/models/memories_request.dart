@@ -14,12 +14,9 @@ String memoriesRequestToJson(MemoriesRequest data) =>
 
 class MemoriesRequest {
   MemoriesRequest({
-    this.requestHeader,
-    this.lanternsAround,
+    required this.requestHeader,
+    required this.lanternsAround,
   });
-
-  BaseRequestHeader requestHeader;
-  LanternsAround lanternsAround;
 
   factory MemoriesRequest.fromJson(Map<String, dynamic> json) =>
       MemoriesRequest(
@@ -32,20 +29,20 @@ class MemoriesRequest {
       );
 
   Map<String, dynamic> toJson() => {
-        "requestHeader": requestHeader == null ? null : requestHeader.toJson(),
+        "requestHeader": requestHeader == null ? null : requestHeader?.toJson(),
         "lanternsAround":
-            lanternsAround == null ? null : lanternsAround.toJson(),
+            lanternsAround == null ? null : lanternsAround?.toJson(),
       };
+
+  BaseRequestHeader? requestHeader;
+  LanternsAround? lanternsAround;
 }
 
 class LanternsAround {
   LanternsAround({
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
   });
-
-  String latitude;
-  String longitude;
 
   factory LanternsAround.fromJson(Map<String, dynamic> json) => LanternsAround(
         latitude: json["latitude"] == null ? null : json["latitude"],
@@ -53,7 +50,10 @@ class LanternsAround {
       );
 
   Map<String, dynamic> toJson() => {
-        "latitude": latitude == null ? null : latitude,
-        "longitude": longitude == null ? null : longitude,
+        "latitude": latitude,
+        "longitude": longitude,
       };
+
+  String latitude;
+  String longitude;
 }

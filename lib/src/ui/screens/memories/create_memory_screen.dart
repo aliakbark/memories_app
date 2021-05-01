@@ -6,17 +6,19 @@ import 'package:memories_app/src/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
 class CreateMemoryScreen extends StatefulWidget {
+  CreateMemoryScreen(
+      {Key? key, required this.latitude, required this.longitude})
+      : super(key: key);
+
   final double latitude;
   final double longitude;
-
-  CreateMemoryScreen({this.latitude, this.longitude});
 
   @override
   _CreateMemoryScreenState createState() => _CreateMemoryScreenState();
 }
 
 class _CreateMemoryScreenState extends State<CreateMemoryScreen> {
-  String _chosenValue;
+  String? _chosenValue;
 
   @override
   void initState() {
@@ -47,7 +49,7 @@ class _CreateMemoryScreenState extends State<CreateMemoryScreen> {
                         children: [
                           TextSpan(
                               text:
-                                  '${snapshot.hasData ? _getAddressText(snapshot?.data?.first) : 'Unknown'}',
+                                  '${snapshot.hasData ? _getAddressText(snapshot.data?.first) : 'Unknown'}',
                               style: Theme.of(context).textTheme.subtitle2),
                         ]),
                   );
@@ -69,14 +71,14 @@ class _CreateMemoryScreenState extends State<CreateMemoryScreen> {
                       child: Text(value),
                     );
                   }).toList(),
-                  hint: Text(
-                    "Select",
+                  hint: const Text(
+                    'Select',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w600),
                   ),
-                  onChanged: (String value) {
+                  onChanged: (String? value) {
                     setState(() {
                       _chosenValue = value;
                     });
@@ -98,7 +100,7 @@ class _CreateMemoryScreenState extends State<CreateMemoryScreen> {
     );
   }
 
-  String _getAddressText(Placemark placemark) {
-    return '${placemark.locality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}, ${placemark.country}';
+  String _getAddressText(Placemark? placemark) {
+    return '${placemark?.locality}, ${placemark?.subAdministrativeArea}, ${placemark?.administrativeArea}, ${placemark?.country}';
   }
 }

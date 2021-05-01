@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memories_app/src/models/memories_response.dart';
 import 'package:memories_app/src/resources/repositories/memories_repository.dart';
@@ -5,9 +6,9 @@ import 'package:memories_app/src/resources/repositories/memories_repository.dart
 part 'memories_state.dart';
 
 class MemoriesCubit extends Cubit<MemoriesState> {
-  final MemoriesRepository _memoriesRepository;
+  MemoriesCubit(this._memoriesRepository) : super(const MemoriesInitial());
 
-  MemoriesCubit(this._memoriesRepository) : super(MemoriesInitial());
+  final MemoriesRepository _memoriesRepository;
 
   Future<void> getMemoriesAround(double latitude, double longitude) async {
     try {
@@ -15,8 +16,9 @@ class MemoriesCubit extends Cubit<MemoriesState> {
       final memoriesResponse = await _memoriesRepository.fetchMemoriesAround(
           latitude: latitude.toString(), longitude: longitude.toString());
       emit(MemoriesLoaded(memoriesResponse));
-    } on NetworkException {
-      emit(MemoriesError("Couldn't fetch memories. Is the device online?"));
+    } catch (e) {
+      // emit(MemoriesError("Couldn't fetch memories. Is the device online?"));
+      emit(MemoriesError(e.toString()));
     }
   }
 }

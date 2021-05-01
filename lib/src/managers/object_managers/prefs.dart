@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// shared preference storage
 class Prefs {
-  SharedPreferences _sharedPreferences;
+  SharedPreferences? _sharedPreferences;
 
   static const String _IS_LOGGED_IN = "is_logged_in";
   static const String _USER_ID = "user_id";
@@ -18,60 +18,59 @@ class Prefs {
   static const String _APP_LOCALE = "app_locale";
   static const String _HAS_LANGUAGE_SET = "has_language_set";
 
-  Prefs();
-
   set sharedPreferences(SharedPreferences value) {
     _sharedPreferences = value;
   }
 
   /// for clearing the data in preference
   void clearPrefs() {
-    _sharedPreferences.clear();
+    _sharedPreferences?.clear();
   }
 
-  bool get isLoggedIn => _sharedPreferences.getBool(_IS_LOGGED_IN) ?? false;
+  bool get isLoggedIn => _sharedPreferences?.getBool(_IS_LOGGED_IN) ?? false;
 
   void setLoginStatus(bool loggedInStatus, {bool autoLogout = false}) async {
-    await _sharedPreferences.setBool(_IS_LOGGED_IN, loggedInStatus);
+    await _sharedPreferences?.setBool(_IS_LOGGED_IN, loggedInStatus);
   }
 
   bool get hasNetworkConnection =>
-      _sharedPreferences.getBool(_NETWORK_CONNECTION) ?? false;
+      _sharedPreferences?.getBool(_NETWORK_CONNECTION) ?? false;
 
   void setNetworkConnectionStatus(bool hasNetworkConnection) async {
-    await _sharedPreferences.setBool(_NETWORK_CONNECTION, hasNetworkConnection);
+    await _sharedPreferences?.setBool(
+        _NETWORK_CONNECTION, hasNetworkConnection);
   }
 
-  String get getUserId => _sharedPreferences.getString(_USER_ID) ?? '';
+  String get getUserId => _sharedPreferences?.getString(_USER_ID) ?? '';
 
   void setUserId(String userId) async {
-    await _sharedPreferences.setString(_USER_ID, userId);
+    await _sharedPreferences?.setString(_USER_ID, userId);
   }
 
-  String get getAuthToken => _sharedPreferences.getString(_AUTH_TOKEN) ?? '';
+  String get getAuthToken => _sharedPreferences?.getString(_AUTH_TOKEN) ?? '';
 
   void setAuthToken(String token) async {
-    await _sharedPreferences.setString(_AUTH_TOKEN, '$token');
+    await _sharedPreferences?.setString(_AUTH_TOKEN, '$token');
   }
 
-  String get getFCMToken => _sharedPreferences.getString(_FCM_TOKEN) ?? '';
+  String get getFCMToken => _sharedPreferences?.getString(_FCM_TOKEN) ?? '';
 
   void setFCMToken(String token) async {
-    await _sharedPreferences.setString(_FCM_TOKEN, '$token');
+    await _sharedPreferences?.setString(_FCM_TOKEN, '$token');
   }
 
   bool get hasLanguageSet =>
-      _sharedPreferences.getBool(_HAS_LANGUAGE_SET) ?? false;
+      _sharedPreferences?.getBool(_HAS_LANGUAGE_SET) ?? false;
 
   void setHasLanguageSet(bool value) async {
-    await _sharedPreferences.setBool(_HAS_LANGUAGE_SET, value);
+    await _sharedPreferences?.setBool(_HAS_LANGUAGE_SET, value);
   }
 
   Locale get getLocale {
-    if (_sharedPreferences.containsKey(_APP_LOCALE) &&
-        _sharedPreferences.getString(_APP_LOCALE).isNotEmpty) {
+    if (_sharedPreferences!.containsKey(_APP_LOCALE) &&
+        (_sharedPreferences?.getString(_APP_LOCALE) ?? '').isNotEmpty) {
       Map<String, dynamic> _loc =
-          jsonDecode(_sharedPreferences.getString(_APP_LOCALE));
+          jsonDecode(_sharedPreferences?.getString(_APP_LOCALE) ?? '');
       return Locale(
         _loc['languageCode'],
         _loc['countryCode'],
@@ -81,15 +80,11 @@ class Prefs {
   }
 
   void setLocale(Locale locale) async {
-    Map<String, dynamic> _loc = {
-      "languageCode": locale.languageCode == null
-          ? Memories.defaultLocale.languageCode
-          : locale.languageCode,
-      "countryCode": locale == null
-          ? Memories.defaultLocale.countryCode
-          : locale.countryCode
+    final _loc = {
+      'languageCode': locale.languageCode,
+      'countryCode': locale.countryCode
     };
-    await _sharedPreferences.setString(_APP_LOCALE, jsonEncode(_loc));
+    await _sharedPreferences?.setString(_APP_LOCALE, jsonEncode(_loc));
   }
 
 // User get getUserData {

@@ -16,26 +16,38 @@ class MemoriesApiProvider {
           Memory(
               title: "cityName",
               distance: "12 km",
-              penName:
-                  "lat: ${memoriesRequest.lanternsAround.latitude}, lon: ${memoriesRequest.lanternsAround.longitude}",
+              latitude: memoriesRequest.lanternsAround?.latitude ?? '',
+              longitude: memoriesRequest.lanternsAround?.longitude ?? '',
+              timestamp: DateTime.now().toString(),
+              typeOfEmotion: '',
+              penName: "Pen name",
               description: "Test test"),
           Memory(
               title: "cityName",
               distance: "3 km",
-              penName:
-                  "lat: ${memoriesRequest.lanternsAround.latitude}, lon: ${memoriesRequest.lanternsAround.longitude}",
+              latitude: memoriesRequest.lanternsAround?.latitude ?? '',
+              longitude: memoriesRequest.lanternsAround?.longitude ?? '',
+              timestamp: DateTime.now().toString(),
+              typeOfEmotion: '',
+              penName: "Pen name",
               description: "Test test"),
           Memory(
               title: "cityName",
               distance: "10 km",
-              penName:
-                  "lat: ${memoriesRequest.lanternsAround.latitude}, lon: ${memoriesRequest.lanternsAround.longitude}",
+              latitude: memoriesRequest.lanternsAround?.latitude ?? '',
+              longitude: memoriesRequest.lanternsAround?.longitude ?? '',
+              timestamp: DateTime.now().toString(),
+              typeOfEmotion: '',
+              penName: "Pen name",
               description: "Test test"),
           Memory(
               title: "cityName",
               distance: "2 km",
-              penName:
-                  "lat: ${memoriesRequest.lanternsAround.latitude}, lon: ${memoriesRequest.lanternsAround.longitude}",
+              latitude: memoriesRequest.lanternsAround?.latitude ?? '',
+              longitude: memoriesRequest.lanternsAround?.longitude ?? '',
+              timestamp: DateTime.now().toString(),
+              typeOfEmotion: '',
+              penName: "Pen name",
               description: "Test test"),
         ]);
   }

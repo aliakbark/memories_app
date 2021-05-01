@@ -6,3 +6,5 @@ class Constants {
     'Happy'
   ];
 }
+
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }

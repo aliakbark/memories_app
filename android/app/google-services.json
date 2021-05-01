@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "128551208748-nkke19kgpqhogfr22lurnqth9mvsfmno.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wehub.memories_app",
+            "certificate_hash": "b029d985d7c606edb18f226f91dd03519cad5e69"
+          }
+        },
+        {
           "client_id": "128551208748-9k81frcjdd837ar2hp4vvlbv1nlv85jf.apps.googleusercontent.com",
           "client_type": 3
         }

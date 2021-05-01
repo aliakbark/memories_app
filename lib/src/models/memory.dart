@@ -11,25 +11,15 @@ String memoryToJson(Memory data) => json.encode(data.toJson());
 class Memory {
   Memory({
     this.lanternId,
-    this.penName,
-    this.typeOfEmotion,
+    required this.penName,
+    required this.typeOfEmotion,
     this.description,
-    this.latitude,
-    this.title,
-    this.longitude,
-    this.timestamp,
+    required this.latitude,
+    required this.title,
+    required this.longitude,
+    required this.timestamp,
     this.distance,
   });
-
-  String lanternId;
-  String penName;
-  String typeOfEmotion;
-  String description;
-  String latitude;
-  String title;
-  String longitude;
-  String timestamp;
-  String distance;
 
   factory Memory.fromJson(Map<String, dynamic> json) => Memory(
         lanternId: json["lantern_id"] == null ? null : json["lantern_id"],
@@ -55,4 +45,14 @@ class Memory {
         "timestamp": timestamp == null ? null : timestamp,
         "distance": distance == null ? null : distance,
       };
+
+  String? lanternId;
+  String penName;
+  String typeOfEmotion;
+  String? description;
+  String latitude;
+  String title;
+  String longitude;
+  String timestamp;
+  String? distance;
 }

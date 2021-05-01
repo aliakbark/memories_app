@@ -15,12 +15,12 @@ String memoriesResponseToJson(MemoriesResponse data) =>
 
 class MemoriesResponse {
   MemoriesResponse({
-    this.responseHeader,
-    this.memoriesAround,
+    required this.responseHeader,
+    required this.memoriesAround,
   });
 
-  BaseResponseHeader responseHeader;
-  List<Memory> memoriesAround;
+  BaseResponseHeader? responseHeader;
+  List<Memory>? memoriesAround;
 
   factory MemoriesResponse.fromJson(Map<String, dynamic> json) =>
       MemoriesResponse(
@@ -35,9 +35,9 @@ class MemoriesResponse {
 
   Map<String, dynamic> toJson() => {
         "responseHeader":
-            responseHeader == null ? null : responseHeader.toJson(),
+            responseHeader == null ? null : responseHeader?.toJson(),
         "memoriesAround": memoriesAround == null
             ? null
-            : List<dynamic>.from(memoriesAround.map((x) => x.toJson())),
+            : List<Memory>.from(memoriesAround!.map((x) => x.toJson())),
       };
 }

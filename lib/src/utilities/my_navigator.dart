@@ -4,15 +4,16 @@ import 'package:memories_app/src/ui/screens/memories/create_memory_screen.dart';
 import 'package:memories_app/src/ui/screens/memories/memory_details_screen.dart';
 
 class MyNavigator {
-  static goToMemoryDetails(BuildContext context, {Memory memory}) {
+  static Future<dynamic> goToMemoryDetails(BuildContext context,
+      {required Memory memory}) {
     return Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MemoryDetailsScreen(memory: memory)));
   }
 
-  static goToCreateMemory(BuildContext context,
-      {double latitude, double longitude}) {
+  static Future<dynamic> goToCreateMemory(BuildContext context,
+      {required double latitude, required double longitude}) {
     return Navigator.push(
         context,
         MaterialPageRoute(

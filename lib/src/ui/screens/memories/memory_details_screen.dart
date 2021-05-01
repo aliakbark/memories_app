@@ -4,7 +4,7 @@ import 'package:memories_app/src/models/memory.dart';
 class MemoryDetailsScreen extends StatefulWidget {
   final Memory memory;
 
-  MemoryDetailsScreen({this.memory});
+  MemoryDetailsScreen({required this.memory});
 
   @override
   _MemoryDetailsScreenState createState() => _MemoryDetailsScreenState();

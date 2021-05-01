@@ -1,15 +1,21 @@
 part of 'memories_cubit.dart';
 
-abstract class MemoriesState {
+abstract class MemoriesState extends Equatable {
   const MemoriesState();
 }
 
 class MemoriesInitial extends MemoriesState {
   const MemoriesInitial();
+
+  @override
+  List<Object> get props => [];
 }
 
 class MemoriesLoading extends MemoriesState {
   const MemoriesLoading();
+
+  @override
+  List<Object> get props => [];
 }
 
 class MemoriesLoaded extends MemoriesState {
@@ -18,28 +24,14 @@ class MemoriesLoaded extends MemoriesState {
   const MemoriesLoaded(this.memoriesResponse);
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is MemoriesLoaded &&
-        other.memoriesResponse == memoriesResponse;
-  }
-
-  @override
-  int get hashCode => memoriesResponse.hashCode;
+  List<Object> get props => [memoriesResponse];
 }
 
 class MemoriesError extends MemoriesState {
-  final String message;
-
   const MemoriesError(this.message);
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is MemoriesError && other.message == message;
-  }
+  final String message;
 
   @override
-  int get hashCode => message.hashCode;
+  List<Object> get props => [message];
 }
