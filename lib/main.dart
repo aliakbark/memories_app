@@ -16,9 +16,9 @@ Future<void> main() async {
 
   await ObjectFactory().firebaseManager.init();
 
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark),
-  );
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark),
+  // );
 
   //* Forcing only portrait orientation
   unawaited(SystemChrome.setPreferredOrientations(

@@ -1,25 +1,15 @@
-
 part of 'app_bloc.dart';
-
-enum AppStatus {
-  authenticated,
-  unauthenticated,
-}
 
 class AppState extends Equatable {
   const AppState._({
-    required this.status,
-    this.user = User.anonymous,
+    this.themeMode = ThemeMode.light,
   });
 
-  const AppState.authenticated(User user)
-      : this._(status: AppStatus.authenticated, user: user);
+  const AppState.theme({required ThemeMode themeMode})
+      : this._(themeMode: themeMode);
 
-  const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
-
-  final AppStatus status;
-  final User user;
+  final ThemeMode themeMode;
 
   @override
-  List<Object> get props => [status, user];
+  List<Object> get props => [themeMode];
 }

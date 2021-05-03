@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:memories_app/src/cubits/login/login_cubit.dart';
 import 'package:authentication/authentication.dart';
 import 'package:formz/formz.dart';
@@ -36,14 +35,20 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (BuildContext context, LoginState state) {
         return Scaffold(
           body: Container(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _GoogleLoginButton(),
-                ],
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Align(
+                    alignment: Alignment.center,
+                    child: FlutterLogo(
+                      size: 128.0,
+                    )),
+                const SizedBox(
+                  height: 48.0,
+                ),
+                _GoogleLoginButton(),
+              ],
             ),
           ),
         );

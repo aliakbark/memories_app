@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memories_app/src/blocs/app/app_bloc.dart';
-import 'package:memories_app/src/cubits/memories_cubit.dart';
+import 'package:memories_app/src/blocs/auth/auth_bloc.dart';
+import 'package:memories_app/src/cubits/memories/memories_cubit.dart';
 import 'package:memories_app/src/managers/object_factory.dart';
 import 'package:memories_app/src/resources/repositories/memories_repository.dart';
 import 'package:memories_app/src/ui/screens/auth/login_screen.dart';
@@ -20,11 +21,11 @@ class App extends StatelessWidget {
   })   : _authenticationRepository = authenticationRepository,
         super(key: key);
 
-  final AuthenticationRepository _authenticationRepository;
-
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
+
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -38,43 +39,17 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AppBloc>(
+          BlocProvider<AppBloc>(create: (BuildContext context) => AppBloc()),
+          BlocProvider<AuthBloc>(
             create: (BuildContext context) =>
-                AppBloc(authenticationRepository: _authenticationRepository),
+                AuthBloc(authenticationRepository: _authenticationRepository),
           ),
-          // BlocProvider<BlocB>(
-          //   create: (BuildContext context) => BlocB(),
-          // ),
         ],
-        child: BlocConsumer<AppBloc, AppState>(
-          listener: (context, state) {
-            switch (state.status) {
-              case AppStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  MemoriesAroundScreen.route(),
-                  (route) => false,
-                );
-                break;
-              case AppStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginScreen.route(),
-                  (route) => false,
-                );
-                break;
-              default:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginScreen.route(),
-                  (route) => false,
-                );
-                break;
-            }
+        child: BlocBuilder<AppBloc, AppState>(
+          buildWhen: (previous, current) {
+            return previous.themeMode != current.themeMode;
           },
-          listenWhen: (previous, current) {
-            // return true/false to determine whether or not
-            // to invoke listener with state
-            return previous.status != current.status;
-          },
-          builder: (BuildContext context, AppState state) {
+          builder: (BuildContext context, AppState appState) {
             return MaterialApp(
               navigatorKey: _navigatorKey,
               navigatorObservers: <NavigatorObserver>[
@@ -83,48 +58,41 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: MyAppTheme.lightTheme,
               darkTheme: MyAppTheme.darkTheme,
-              // themeMode: appState.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-              themeMode: ThemeMode.light,
-              // onGenerateRoute: (_) => SplashScreen.route(),
-              onGenerateRoute: (_) => _navigate(state.status),
+              themeMode: appState.themeMode,
+              builder: (context, child) {
+                return MultiBlocListener(
+                  listeners: [
+                    BlocListener<AuthBloc, AuthState>(
+                      listenWhen: (previous, current) =>
+                          previous.status != current.status,
+                      listener: (context, state) {
+                        switch (state.status) {
+                          case AuthStatus.authenticated:
+                            _navigator.pushAndRemoveUntil<void>(
+                              MemoriesAroundScreen.route(),
+                              (route) => false,
+                            );
+                            break;
+                          case AuthStatus.unauthenticated:
+                            _navigator.pushAndRemoveUntil<void>(
+                              LoginScreen.route(),
+                              (route) => false,
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                    ),
+                  ],
+                  child: child!,
+                );
+              },
+              onGenerateRoute: (_) => SplashScreen.route(),
             );
           },
         ),
       ),
     );
-    // return ChangeNotifierProvider(
-    //   create: (_) => appState,
-    //   child: Consumer<AppState>(
-    //     builder: (context, appState, child) {
-    //       return MaterialApp(
-    //         navigatorKey: navigatorKey,
-    //         debugShowCheckedModeBanner: false,
-    //         theme: MyAppTheme.lightTheme,
-    //         darkTheme: MyAppTheme.darkTheme,
-    //         themeMode: appState.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-    //         navigatorObservers: <NavigatorObserver>[
-    //           ObjectFactory().firebaseManager.firebaseAnalyticsObserver
-    //         ],
-    //         home: BlocProvider(
-    //           create: (context) => MemoriesCubit(FakeMemoryRepository()),
-    //           child: LoginScreen(),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
-  }
-
-  _navigate(AppStatus status) {
-    switch (status) {
-      case AppStatus.authenticated:
-        return MemoriesAroundScreen.route();
-
-      case AppStatus.unauthenticated:
-        return LoginScreen.route();
-
-      default:
-        return LoginScreen.route();
-    }
   }
 }

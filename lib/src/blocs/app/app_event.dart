@@ -7,14 +7,11 @@ abstract class AppEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AppLogoutRequested extends AppEvent {}
+class AppThemeChanged extends AppEvent {
+  const AppThemeChanged(this.isDarkMode);
 
-class AppUserChanged extends AppEvent {
-  @visibleForTesting
-  const AppUserChanged(this.user);
-
-  final User user;
+  final bool isDarkMode;
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [isDarkMode];
 }

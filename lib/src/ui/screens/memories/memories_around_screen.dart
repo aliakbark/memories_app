@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:memories_app/src/blocs/app/app_bloc.dart';
-import 'package:memories_app/src/cubits/memories_cubit.dart';
+import 'package:memories_app/src/blocs/auth/auth_bloc.dart';
+import 'package:memories_app/src/cubits/memories/memories_cubit.dart';
 import 'package:memories_app/src/managers/memories.dart';
 import 'package:memories_app/src/managers/object_factory.dart';
 import 'package:memories_app/src/models/memory.dart';
@@ -64,32 +65,62 @@ class _MemoriesAroundScreenState extends State<MemoriesAroundScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) => bloc.state.user);
-    print(user.toString());
+    final user = context.select((AuthBloc bloc) => bloc.state.user);
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(
-              user.photo ?? '',
-            ),
-            backgroundColor: Colors.transparent,
-          ),
-        ),
-        title: Text('${user.name}'),
         actions: [
-          // IconButton(
-          //     icon: Icon(Icons.refresh),
-          //     onPressed: () {
-          //       _determinePosition();
-          //     }),
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          ),
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                _determinePosition();
+              }),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    user.photo ?? '',
+                  ),
+                  backgroundColor: Colors.transparent,
+                ),
+                accountName: Text('${user.name}'),
+                accountEmail: Text('${user.email}')),
+            ListTile(
+              leading: Icon(
+                Icons.home,
+              ),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.model_training,
+              ),
+              title: Text('Dark mode'),
+              trailing: Switch(
+                  key: const Key('change_theme'),
+                  value: context.select((AppBloc appBloc) =>
+                      appBloc.state.themeMode == ThemeMode.dark),
+                  onChanged: (value) {
+                    context.read<AppBloc>().add(AppThemeChanged(value));
+                  }),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.logout,
+              ),
+              title: Text('Logout'),
+              onTap: () => context.read<AuthBloc>().add(AuthLogoutRequested()),
+            ),
+          ],
+        ),
       ),
       body: Container(
         alignment: Alignment.center,
